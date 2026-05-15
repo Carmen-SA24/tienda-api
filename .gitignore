@@ -4,6 +4,9 @@
 /build
 *.tsbuildinfo
 
+# local documentation (not pushed to repo)
+/README.md
+
 # Logs
 logs
 *.log
