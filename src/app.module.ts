@@ -24,7 +24,7 @@ import { TiendaModule } from './tienda/tienda.module';
         username: config.get<string>('DB_USER'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        autoLoadEntities: true,
         synchronize: (config.get<string>('DB_SYNC') === 'true'),
         logging: false,
       }),
