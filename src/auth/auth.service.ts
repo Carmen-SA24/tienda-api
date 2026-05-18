@@ -17,6 +17,7 @@ export class AuthService {
   ) {}
 
   // Registra un nuevo usuario: verifica que el email no exista, crea el usuario y devuelve token JWT
+  // El primer usuario registrado en el sistema se convierte automáticamente en admin
   async register(registerDto: RegisterDto) {
     const { email, password, nombre } = registerDto;
 
@@ -26,8 +27,12 @@ export class AuthService {
       throw new ConflictException('El email ya está registrado');
     }
 
+    // Si no hay ningún admin en la BD, el primer registro será admin
+    const adminCount = await this.userRepository.count({ where: { rol: 'admin' } });
+    const rol = adminCount === 0 ? 'admin' : 'user';
+
     // Crea el usuario (la contraseña se cifra automáticamente con @BeforeInsert en la entidad)
-    const user = this.userRepository.create({ email, password, nombre });
+    const user = this.userRepository.create({ email, password, nombre, rol });
     await this.userRepository.save(user);
 
     // Genera y devuelve un token JWT con los datos del usuario
